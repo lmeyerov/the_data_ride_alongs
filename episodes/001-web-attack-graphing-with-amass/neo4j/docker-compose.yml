@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  neo4j:
+    image: neo4j:3.5.11
+    network_mode: "bridge"
+    ports:
+      - "10001:7687"
+      - "10002:7473"
+      - "10003:7474"
+    restart: always
+    volumes:
+      - /home/ubuntu/graphistry/data/notebooks:/var/lib/neo4j/import/notebooks:ro
+      - /home/ubuntu/graphistry/data/notebooks/neo4j/plugins:/plugins
+      - /home/ubuntu/graphistry/data/notebooks/neo4j/data:/data
+      - /home/ubuntu/graphistry/data/notebooks/neo4j/logs:/logs
+      - /home/ubuntu/graphistry/data/notebooks/neo4j/conf:/var/lib/neo4j/conf
+    environment:
+      - NEO4JLABS_PLUGINS=["apoc", "graph-algorithms"]
+      - NEO4J_AUTH=neo4j/my_pwd_here
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_dbms_memory_pagecache_size=10G
+      - NEO4J_dbms_memory_heap_initial__size=10G
+      - NEO4J_dbms_memory_heap_max__size=10G
+      - NEO4J_dbms_active__database=dcu.db
+      #- NEO4J_apoc_import_file_enabled=true
+      #- NEO4J_apoc_export_file_enabled=true
+      #NEO4J_dbms_security_procedures_unrestricted
+    logging:
+      options:
+        tag: "ImageName:{{.ImageName}}/Name:{{.Name}}/ID:{{.ID}}/ImageFullID:{{.ImageFullID}}"
